@@ -4,6 +4,7 @@ import { MediaMapper } from './mapper/media.mapper';
 import { MediaController } from './adapter/in/http/controllers/media.controller';
 import { MEDIA_TOKENS } from './media.token';
 import { UploadMediaService } from './application/use-cases/upload-media.service';
+import { GetMediaService } from './application/use-cases/get-media.service';
 import { MediaRepositoryAdapter } from './adapter/out/persistence/media.repository.adapter';
 import { S3Service } from './adapter/out/storage/s3.service';
 import { PrismaService } from './adapter/out/persistence/prisma/prisma.service';
@@ -25,6 +26,7 @@ import { RedisTokenVersionQueryAdapter } from './adapter/out/cache/redis-token-v
 
     // UseCase 바인딩
     { provide: MEDIA_TOKENS.UploadMediaUseCase, useClass: UploadMediaService },
+    { provide: MEDIA_TOKENS.GetMediaUseCase, useClass: GetMediaService },
 
     // Query 바인딩 (읽기)
     {

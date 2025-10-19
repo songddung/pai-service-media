@@ -1,6 +1,7 @@
 export const MEDIA_TOKENS = {
   // UseCase (Input Ports)
   UploadMediaUseCase: Symbol('UploadMediaUseCase'),
+  GetMediaUseCase: Symbol('GetMediaUseCase'),
 
   // Repository (Output Ports - Write)
   mediaRepositoryPort: Symbol('mediaRepositoryPort'),

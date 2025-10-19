@@ -41,11 +41,11 @@ export class UploadMediaService implements UploadMediaUseCase {
 
     // 5. Response DTO 변환
     return {
-      mediaId: saved.getId()!.toString() as any,
+      mediaId: saved.getId()!.toString(),
       cdnUrl: saved.getCdnUrl(),
       fileName: saved.getFileName(),
       mimeType: saved.getMimeType(),
-      fileSize: saved.getFileSize().toString() as any,
+      fileSize: saved.getFileSize().toString(),
       createdAt: saved.getCreatedAt().toISOString(),
     };
   }

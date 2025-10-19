@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { UploadMediaRequestDto } from 'pai-shared-types';
+import type { UploadMediaRequestDto, OwnerType } from 'pai-shared-types';
 import { UploadMediaCommand } from 'src/application/command/upload-media.command';
+import { GetMediaCommand } from 'src/application/command/get-media.command';
 
 @Injectable()
 export class MediaMapper {
@@ -9,12 +10,18 @@ export class MediaMapper {
     dto: UploadMediaRequestDto,
     profileId: number,
   ): UploadMediaCommand {
-    console.log('profileId:', profileId, typeof profileId);
-    console.log('dto:', dto);
+    // DTO의 string 타입을 Command의 bigint 타입으로 변환
+    return new UploadMediaCommand(
+      file,
+      dto.ownerType,
+      BigInt(dto.ownerId),
+      BigInt(profileId),
+    );
+  }
 
-    const ownerId = dto.ownerId || (dto as any)['ownerId'];
-    const ownerType = dto.ownerType || (dto as any)['ownerType'];
-
-    return new UploadMediaCommand(file, ownerType, BigInt(ownerId), BigInt(profileId));
+  toGetMediaCommand(ownerType: OwnerType, ownerId: string): GetMediaCommand {
+    // "3" 또는 "3,4,5" 형태를 배열로 변환
+    const ownerIds = ownerId.split(',').map((id) => BigInt(id.trim()));
+    return new GetMediaCommand(ownerType, ownerIds);
   }
 }

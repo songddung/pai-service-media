@@ -45,4 +45,33 @@ export class MediaRepositoryAdapter implements MediaRepositoryPort {
       where: { media_id: BigInt(mediaId) },
     });
   }
+
+  async findByOwners(ownerType: OwnerType, ownerIds: bigint[]): Promise<Media[]> {
+    const records = await this.prisma.media.findMany({
+      where: {
+        owner_type: ownerType,
+        owner_id: {
+          in: ownerIds,
+        },
+      },
+      orderBy: {
+        created_at: 'desc',
+      },
+    });
+
+    return records.map((record) =>
+      Media.rehydrate({
+        id: record.media_id,
+        fileName: record.file_name,
+        mimeType: record.mime_type,
+        fileSize: record.file_size,
+        s3Key: record.s3_key,
+        cdnUrl: record.cdn_url,
+        ownerType: record.owner_type as OwnerType,
+        ownerId: record.owner_id,
+        profileId: record.profile_id,
+        createdAt: record.created_at,
+      }),
+    );
+  }
 }
