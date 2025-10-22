@@ -1,5 +1,8 @@
 import { IsEnum, IsString } from 'class-validator';
-import type { OwnerType, UploadMediaRequestDto as IUploadMediaRequestDto } from 'pai-shared-types';
+import type {
+  OwnerType,
+  UploadMediaRequestDto as IUploadMediaRequestDto,
+} from 'pai-shared-types';
 
 export class UploadMediaRequestDto implements IUploadMediaRequestDto {
   @IsEnum(['profile', 'conversation'], {
@@ -8,5 +11,5 @@ export class UploadMediaRequestDto implements IUploadMediaRequestDto {
   ownerType: OwnerType;
 
   @IsString()
-  ownerId: string;
+  ownerId: number;
 }

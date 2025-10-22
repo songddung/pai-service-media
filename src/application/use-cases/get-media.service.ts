@@ -2,8 +2,8 @@ import { Inject, Injectable } from '@nestjs/common';
 import { GetMediaUseCase } from '../port/in/get-media.use-case';
 import { GetMediaCommand } from '../command/get-media.command';
 import { MEDIA_TOKENS } from 'src/media.token';
-import type { GetMediaResponseData } from 'pai-shared-types';
 import type { MediaRepositoryPort } from '../port/out/media.repository.port';
+import { GetMediaResult } from '../port/in/result/get-media.result';
 
 @Injectable()
 export class GetMediaService implements GetMediaUseCase {
@@ -12,7 +12,7 @@ export class GetMediaService implements GetMediaUseCase {
     private readonly mediaRepository: MediaRepositoryPort,
   ) {}
 
-  async execute(command: GetMediaCommand): Promise<GetMediaResponseData[]> {
+  async execute(command: GetMediaCommand): Promise<GetMediaResult[]> {
     // 1. Repository에서 미디어 조회
     const mediaList = await this.mediaRepository.findByOwners(
       command.ownerType,
@@ -21,9 +21,9 @@ export class GetMediaService implements GetMediaUseCase {
 
     // 2. Response DTO 변환
     return mediaList.map((media) => ({
-      mediaId: media.getId()!.toString(),
+      mediaId: Number(media.getId())!,
       ownerType: media.getOwnerType(),
-      ownerId: media.getOwnerId().toString(),
+      ownerId: Number(media.getOwnerId()),
       cdnUrl: media.getCdnUrl(),
       fileName: media.getFileName(),
       mimeType: media.getMimeType(),

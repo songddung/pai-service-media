@@ -44,11 +44,12 @@ export class MediaController {
   ): Promise<BaseResponse<UploadMediaResponseData>> {
     const command = this.mediaMapper.toUploadMediaCommand(file, dto, profileId);
     const result = await this.uploadUseCase.execute(command);
+    const response = this.mediaMapper.toUploadMediaResponse(result);
 
     return {
       success: true,
       message: '파일 업로드 성공',
-      data: result,
+      data: response,
     };
   }
 
@@ -57,18 +58,15 @@ export class MediaController {
     @Query() dto: GetMediaRequestDto,
   ): Promise<BaseResponse<GetMediaResponseData[]>> {
     // Mapper를 통해 Command 생성
-    const command = this.mediaMapper.toGetMediaCommand(
-      dto.ownerType,
-      dto.ownerId,
-    );
+    const command = this.mediaMapper.toGetMediaCommand(dto);
 
     // Use case 실행
     const result = await this.getMediaUseCase.execute(command);
-
+    const response = this.mediaMapper.toGetMediaResponse(result);
     return {
       success: true,
       message: '미디어 조회 성공',
-      data: result,
+      data: response,
     };
   }
 }
