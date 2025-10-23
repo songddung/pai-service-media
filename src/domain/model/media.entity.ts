@@ -30,25 +30,21 @@ export class Media {
     private readonly createdAt: Date,
   ) {}
 
-  /**
-   * È\´ ø´ İ1 (| Å\Ü Ü)
-   */
   static create(props: CreateMediaProps): Media {
-    // DˆÈ¤ ÜY €
     if (!props.fileName || props.fileName.trim() === '') {
-      throw new Error('|…@ D…Èä.');
+      throw new Error('|ï¿½@ Dï¿½ï¿½ï¿½.');
     }
 
     if (!props.mimeType) {
-      throw new Error('MIME À…@ D…Èä.');
+      throw new Error('MIME ï¿½ï¿½@ Dï¿½ï¿½ï¿½.');
     }
 
     if (props.fileSize <= 0n) {
-      throw new Error('| l0” 0ôä ä| iÈä.');
+      throw new Error('| l0ï¿½ 0ï¿½ï¿½ ï¿½| iï¿½ï¿½.');
     }
 
     return new Media(
-      null, // ID” DBĞ İ1
+      null, // IDï¿½ DBï¿½ ï¿½1
       props.fileName,
       props.mimeType,
       props.fileSize,
@@ -62,7 +58,7 @@ export class Media {
   }
 
   /**
-   * DBĞ ˆì, L ¬©
+   * DBï¿½ ï¿½ï¿½, L ï¿½ï¿½
    */
   static rehydrate(props: RehydrateMediaProps): Media {
     return new Media(
@@ -120,7 +116,7 @@ export class Media {
     return this.createdAt;
   }
 
-  // DˆÈ¤ TÜ
+  // Dï¿½È¤ Tï¿½
   isOwnedBy(profileId: bigint): boolean {
     return this.profileId === profileId;
   }

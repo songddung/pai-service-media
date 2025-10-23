@@ -5,4 +5,4 @@
 
 */
 -- AlterTable
-ALTER TABLE "Media" ADD COLUMN     "profile_id" BIGINT NOT NULL;
+ALTER TABLE "Media" ADD COLUMN     "profile_id" INT NOT NULL;

@@ -11,7 +11,7 @@ model Media {
   media_id      BigInt @id @default(autoincrement())
   owner_type    String
   owner_id      BigInt
-  profile_id    BigInt
+  profile_id    Int
   file_name     String
   mime_type     String
   file_size     BigInt
