@@ -7,6 +7,7 @@ export const MEDIA_TOKENS = {
   mediaRepositoryPort: Symbol('mediaRepositoryPort'),
 
   // Query (Output Ports - Read)
+  MediaQueryPort: Symbol('MediaQueryPort'),
   TokenVersionQueryPort: Symbol('TokenVersionQueryPort'),
 
   // External Services (Output Ports)

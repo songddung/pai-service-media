@@ -1,11 +1,13 @@
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { UploadMediaUseCase } from '../port/in/upload-media.use-case';
 import { MEDIA_TOKENS } from 'src/media.token';
-import { UploadMediaResponseData } from 'pai-shared-types';
 import { UploadMediaCommand } from '../command/upload-media.command';
 import type { MediaRepositoryPort } from '../port/out/media.repository.port';
 import type { S3ServicePort } from '../port/out/s3-service.port';
-import { Media } from 'src/domain/model/media.entity';
+import { Media } from 'src/domain/model/entity/media.entity';
+import { FileInfo } from 'src/domain/model/vo/file-info.vo';
+import { StorageInfo } from 'src/domain/model/vo/storage-info.vo';
+import { UploadMediaResult } from '../port/in/result/upload-media.result';
 
 @Injectable()
 export class UploadMediaService implements UploadMediaUseCase {
@@ -17,35 +19,42 @@ export class UploadMediaService implements UploadMediaUseCase {
     private readonly s3Service: S3ServicePort,
   ) {}
 
-  async execute(command: UploadMediaCommand): Promise<UploadMediaResponseData> {
+  async execute(command: UploadMediaCommand): Promise<UploadMediaResult> {
     // 1. 파일 검증
     this.validateFile(command.file);
 
     // 2. S3에 파일 업로드
     const { s3Key, cdnUrl } = await this.s3Service.upload(command.file);
 
-    // 3. Media 엔티티 생성
+    // 3. FileInfo VO 생성
+    const fileInfo = FileInfo.create(
+      command.file.originalname,
+      command.file.mimetype,
+      BigInt(command.file.size),
+    );
+
+    // 4. StorageInfo VO 생성
+    const storageInfo = StorageInfo.create(s3Key, cdnUrl);
+
+    // 5. Media 엔티티 생성
     const media = Media.create({
-      fileName: command.file.originalname,
-      mimeType: command.file.mimetype,
-      fileSize: BigInt(command.file.size),
-      s3Key,
-      cdnUrl,
+      fileInfo,
+      storageInfo,
       ownerType: command.ownerType,
       ownerId: command.ownerId,
       profileId: command.profileId,
     });
 
-    // 4. DB에 저장
+    // 6. DB에 저장
     const saved = await this.mediaRepository.save(media);
 
-    // 5. Response DTO 변환
+    // 7. Response DTO 변환
     return {
-      mediaId: saved.getId()!.toString(),
+      mediaId: saved.getId()!,
       cdnUrl: saved.getCdnUrl(),
       fileName: saved.getFileName(),
       mimeType: saved.getMimeType(),
-      fileSize: saved.getFileSize().toString(),
+      fileSize: saved.getFileSize(),
       createdAt: saved.getCreatedAt().toISOString(),
     };
   }

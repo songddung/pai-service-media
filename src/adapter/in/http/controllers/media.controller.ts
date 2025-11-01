@@ -21,7 +21,7 @@ import type {
 import { UploadMediaRequestDto } from '../dto/upload-media-request.dto';
 import { GetMediaRequestDto } from '../dto/get-media-request.dto';
 import { Auth } from '../decorators/auth.decorator';
-import { MediaMapper } from 'src/mapper/media.mapper';
+import { MediaMapper } from 'src/application/port/in/mapper/media.mapper';
 import { AuthGuard } from '../auth/guards/auth.guard';
 
 @UseGuards(AuthGuard)

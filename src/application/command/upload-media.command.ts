@@ -4,7 +4,7 @@ export class UploadMediaCommand {
   constructor(
     public readonly file: Express.Multer.File,
     public readonly ownerType: ownerType,
-    public readonly ownerId: number,
-    public readonly profileId: number,
+    public readonly ownerId: bigint,
+    public readonly profileId: bigint,
   ) {}
 }

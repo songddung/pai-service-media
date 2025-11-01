@@ -1,12 +1,11 @@
-import { OwnerType } from 'pai-shared-types';
+import { ownerType } from 'src/application/port/in/enum/owner-type';
+import { FileInfo } from '../vo/file-info.vo';
+import { StorageInfo } from '../vo/storage-info.vo';
 
 interface CreateMediaProps {
-  fileName: string;
-  mimeType: string;
-  fileSize: bigint;
-  s3Key: string;
-  cdnUrl: string;
-  ownerType: OwnerType;
+  fileInfo: FileInfo;
+  storageInfo: StorageInfo;
+  ownerType: ownerType;
   ownerId: bigint;
   profileId: bigint;
 }
@@ -19,37 +18,19 @@ interface RehydrateMediaProps extends CreateMediaProps {
 export class Media {
   private constructor(
     private readonly id: bigint | null,
-    private readonly fileName: string,
-    private readonly mimeType: string,
-    private readonly fileSize: bigint,
-    private readonly s3Key: string,
-    private readonly cdnUrl: string,
-    private readonly ownerType: OwnerType,
+    private readonly fileInfo: FileInfo,
+    private readonly storageInfo: StorageInfo,
+    private readonly ownerType: ownerType,
     private readonly ownerId: bigint,
     private readonly profileId: bigint,
     private readonly createdAt: Date,
   ) {}
 
   static create(props: CreateMediaProps): Media {
-    if (!props.fileName || props.fileName.trim() === '') {
-      throw new Error('|�@ D���.');
-    }
-
-    if (!props.mimeType) {
-      throw new Error('MIME ��@ D���.');
-    }
-
-    if (props.fileSize <= 0n) {
-      throw new Error('| l0� 0�� �| i��.');
-    }
-
     return new Media(
-      null, // ID� DB� �1
-      props.fileName,
-      props.mimeType,
-      props.fileSize,
-      props.s3Key,
-      props.cdnUrl,
+      null, // ID는 DB에서 생성
+      props.fileInfo,
+      props.storageInfo,
       props.ownerType,
       props.ownerId,
       props.profileId,
@@ -58,16 +39,13 @@ export class Media {
   }
 
   /**
-   * DB� ��, L ��
+   * DB에서 조회한 데이터로 엔티티 재구성
    */
   static rehydrate(props: RehydrateMediaProps): Media {
     return new Media(
       props.id,
-      props.fileName,
-      props.mimeType,
-      props.fileSize,
-      props.s3Key,
-      props.cdnUrl,
+      props.fileInfo,
+      props.storageInfo,
       props.ownerType,
       props.ownerId,
       props.profileId,
@@ -80,27 +58,35 @@ export class Media {
     return this.id;
   }
 
+  getFileInfo(): FileInfo {
+    return this.fileInfo;
+  }
+
   getFileName(): string {
-    return this.fileName;
+    return this.fileInfo.getFileName();
   }
 
   getMimeType(): string {
-    return this.mimeType;
+    return this.fileInfo.getMimeType();
   }
 
   getFileSize(): bigint {
-    return this.fileSize;
+    return this.fileInfo.getFileSize();
+  }
+
+  getStorageInfo(): StorageInfo {
+    return this.storageInfo;
   }
 
   getS3Key(): string {
-    return this.s3Key;
+    return this.storageInfo.getS3Key();
   }
 
   getCdnUrl(): string {
-    return this.cdnUrl;
+    return this.storageInfo.getCdnUrl();
   }
 
-  getOwnerType(): OwnerType {
+  getOwnerType(): ownerType {
     return this.ownerType;
   }
 
@@ -116,20 +102,20 @@ export class Media {
     return this.createdAt;
   }
 
-  // D�Ȥ T�
+  // 도메인 로직
   isOwnedBy(profileId: bigint): boolean {
     return this.profileId === profileId;
   }
 
   isImage(): boolean {
-    return this.mimeType.startsWith('image/');
+    return this.fileInfo.isImage();
   }
 
   isVideo(): boolean {
-    return this.mimeType.startsWith('video/');
+    return this.fileInfo.isVideo();
   }
 
   isAudio(): boolean {
-    return this.mimeType.startsWith('audio/');
+    return this.fileInfo.isAudio();
   }
 }

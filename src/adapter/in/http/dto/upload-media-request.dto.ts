@@ -11,5 +11,5 @@ export class UploadMediaRequestDto implements IUploadMediaRequestDto {
   ownerType: OwnerType;
 
   @IsString()
-  ownerId: number;
+  ownerId: string;
 }
