@@ -1,51 +1,22 @@
-import {
-  Controller,
-  Get,
-  Inject,
-  Post,
-  Query,
-  UploadedFile,
-  UseGuards,
-  UseInterceptors,
-} from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { Controller, Get, Inject, Query } from '@nestjs/common';
 import { MEDIA_TOKENS } from 'src/media.token';
-import type { UploadMediaUseCase } from 'src/application/port/in/upload-media.use-case';
 import type { GetMediaUseCase } from 'src/application/port/in/get-media.use-case';
 import type {
   BaseResponse,
-  UploadMediaResponseData,
   GetMediaResponseData,
 } from 'pai-shared-types';
 import { MediaMapper } from 'src/application/port/in/mapper/media.mapper';
-import { BasicAuthGuard } from '../auth/guards/auth.guard';
 
-@UseGuards(BasicAuthGuard)
-@Controller('api/media')
-export class MediaController {
+/**
+ * 내부 서비스 간 통신용 컨트롤러 (인증 없음)
+ */
+@Controller('internal/media')
+export class InternalMediaController {
   constructor(
-    @Inject(MEDIA_TOKENS.UploadMediaUseCase)
-    private readonly uploadUseCase: UploadMediaUseCase,
     @Inject(MEDIA_TOKENS.GetMediaUseCase)
     private readonly getMediaUseCase: GetMediaUseCase,
     private readonly mediaMapper: MediaMapper,
   ) {}
-
-  @Post('upload')
-  @UseInterceptors(FileInterceptor('file'))
-  async uploadMedia(
-    @UploadedFile() file: Express.Multer.File,
-  ): Promise<BaseResponse<UploadMediaResponseData>> {
-    const command = this.mediaMapper.toUploadMediaCommand(file);
-    const result = await this.uploadUseCase.execute(command);
-    const response = this.mediaMapper.toUploadMediaResponse(result);
-
-    return {
-      success: true,
-      message: '파일 업로드 성공',
-      data: response,
-    };
-  }
 
   @Get()
   async getMedia(

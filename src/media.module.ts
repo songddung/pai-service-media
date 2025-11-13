@@ -7,6 +7,7 @@ import {
 } from './adapter/in/http/auth/guards/auth.guard';
 import { MediaMapper } from './application/port/in/mapper/media.mapper';
 import { MediaController } from './adapter/in/http/controllers/media.controller';
+import { InternalMediaController } from './adapter/in/http/controllers/internal.controller';
 import { MEDIA_TOKENS } from './media.token';
 import { UploadMediaService } from './application/use-cases/upload-media.service';
 import { GetMediaService } from './application/use-cases/get-media.service';
@@ -20,7 +21,7 @@ import { MediaQueryAdapter } from './adapter/out/persistence/media/media.query.a
 
 @Module({
   imports: [RedisModule],
-  controllers: [MediaController],
+  controllers: [MediaController, InternalMediaController],
   providers: [
     // Guard
     AuthGuard,

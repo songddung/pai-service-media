@@ -14,17 +14,12 @@ export class GetMediaService implements GetMediaUseCase {
   ) {}
 
   async execute(command: GetMediaCommand): Promise<GetMediaResult[]> {
-    // 1. Repository에서 미디어 조회
-    const mediaList = await this.mediaQuery.findByOwners(
-      command.ownerType,
-      command.ownerIds,
-    );
+    // 1. Repository에서 미디어 조회 (빈 배열이면 전체 조회)
+    const mediaList = await this.mediaQuery.findByIds(command.mediaIds);
 
     // 2. Response DTO 변환
     return mediaList.map((media) => ({
       mediaId: media.getId()!,
-      ownerType: media.getOwnerType(),
-      ownerId: media.getOwnerId(),
       cdnUrl: media.getCdnUrl(),
       fileName: media.getFileName(),
       mimeType: media.getMimeType(),

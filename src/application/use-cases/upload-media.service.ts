@@ -40,9 +40,6 @@ export class UploadMediaService implements UploadMediaUseCase {
     const media = Media.create({
       fileInfo,
       storageInfo,
-      ownerType: command.ownerType,
-      ownerId: command.ownerId,
-      profileId: command.profileId,
     });
 
     // 6. DB에 저장

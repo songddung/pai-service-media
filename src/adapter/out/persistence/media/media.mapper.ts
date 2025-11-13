@@ -2,7 +2,6 @@ import { Media } from 'src/domain/model/entity/media.entity';
 import { FileInfo } from 'src/domain/model/vo/file-info.vo';
 import { StorageInfo } from 'src/domain/model/vo/storage-info.vo';
 import { MediaRecord } from './media.type';
-import { ownerType } from 'src/application/port/in/enum/owner-type';
 
 export class MediaMapper {
   /**
@@ -22,9 +21,6 @@ export class MediaMapper {
       id: record.media_id,
       fileInfo,
       storageInfo,
-      ownerType: record.owner_type as ownerType,
-      ownerId: record.owner_id,
-      profileId: BigInt(record.profile_id),
       createdAt: record.created_at,
     });
   }
@@ -40,9 +36,6 @@ export class MediaMapper {
       file_size: media.getFileSize(),
       s3_key: media.getS3Key(),
       cdn_url: media.getCdnUrl(),
-      owner_type: media.getOwnerType(),
-      owner_id: media.getOwnerId(),
-      profile_id: media.getProfileId(),
     };
   }
 }
