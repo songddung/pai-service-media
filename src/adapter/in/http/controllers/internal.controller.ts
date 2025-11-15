@@ -26,7 +26,11 @@ export class InternalMediaController {
 
     // mediaIds 파라미터를 bigint 배열로 변환
     const ids = mediaIds
-      ? mediaIds.split(',').map((id) => BigInt(id.trim()))
+      ? mediaIds
+          .split(',')
+          .map((id) => id.trim())
+          .filter((id) => id !== '' && !isNaN(Number(id))) // 빈 문자열 및 숫자가 아닌 값 제거
+          .map((id) => BigInt(id))
       : [];
 
     console.log('🔍 변환된 ID 배열:', ids);
