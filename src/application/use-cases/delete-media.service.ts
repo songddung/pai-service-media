@@ -21,12 +21,14 @@ export class DeleteMediaService implements DeleteMediaUseCase {
 
   async execute(command: DeleteMediaCommand): Promise<void> {
     // 1. Media 존재 여부 확인
-    const media = await this.mediaQuery.findById(command.mediaId);
-    if (!media) {
+    const mediaList = await this.mediaQuery.findByIds([command.mediaId]);
+    if (!mediaList || mediaList.length === 0) {
       throw new NotFoundException(
         `미디어 ID ${command.mediaId}를 찾을 수 없습니다.`,
       );
     }
+
+    const media = mediaList[0];
 
     // 2. S3에서 파일 삭제
     try {
