@@ -2,12 +2,14 @@ export const MEDIA_TOKENS = {
   // UseCase (Input Ports)
   UploadMediaUseCase: Symbol('UploadMediaUseCase'),
   GetMediaUseCase: Symbol('GetMediaUseCase'),
+  DeleteMediaUseCase: Symbol('DeleteMediaUseCase'),
 
   // Repository (Output Ports - Write)
   mediaRepositoryPort: Symbol('mediaRepositoryPort'),
 
   // Query (Output Ports - Read)
   MediaQueryPort: Symbol('MediaQueryPort'),
+  mediaQueryPort: Symbol('mediaQueryPort'),
   TokenVersionQueryPort: Symbol('TokenVersionQueryPort'),
 
   // External Services (Output Ports)

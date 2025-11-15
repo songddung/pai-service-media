@@ -11,6 +11,7 @@ import { InternalMediaController } from './adapter/in/http/controllers/internal.
 import { MEDIA_TOKENS } from './media.token';
 import { UploadMediaService } from './application/use-cases/upload-media.service';
 import { GetMediaService } from './application/use-cases/get-media.service';
+import { DeleteMediaService } from './application/use-cases/delete-media.service';
 
 import { S3Service } from './adapter/out/storage/s3.service';
 import { PrismaService } from './adapter/out/persistence/prisma/prisma.service';
@@ -35,10 +36,15 @@ import { MediaQueryAdapter } from './adapter/out/persistence/media/media.query.a
     // UseCase 바인딩
     { provide: MEDIA_TOKENS.UploadMediaUseCase, useClass: UploadMediaService },
     { provide: MEDIA_TOKENS.GetMediaUseCase, useClass: GetMediaService },
+    { provide: MEDIA_TOKENS.DeleteMediaUseCase, useClass: DeleteMediaService },
 
     // Query 바인딩 (읽기)
     {
       provide: MEDIA_TOKENS.MediaQueryPort,
+      useClass: MediaQueryAdapter,
+    },
+    {
+      provide: MEDIA_TOKENS.mediaQueryPort,
       useClass: MediaQueryAdapter,
     },
     {

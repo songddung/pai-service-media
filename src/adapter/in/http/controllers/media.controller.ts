@@ -1,7 +1,9 @@
 import {
   Controller,
+  Delete,
   Get,
   Inject,
+  Param,
   Post,
   Query,
   UploadedFile,
@@ -12,6 +14,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { MEDIA_TOKENS } from 'src/media.token';
 import type { UploadMediaUseCase } from 'src/application/port/in/upload-media.use-case';
 import type { GetMediaUseCase } from 'src/application/port/in/get-media.use-case';
+import type { DeleteMediaUseCase } from 'src/application/port/in/delete-media.use-case';
 import type {
   BaseResponse,
   UploadMediaResponseData,
@@ -19,6 +22,7 @@ import type {
 } from 'pai-shared-types';
 import { MediaMapper } from 'src/application/port/in/mapper/media.mapper';
 import { BasicAuthGuard } from '../auth/guards/auth.guard';
+import { DeleteMediaCommand } from 'src/application/command/delete-media.command';
 
 @UseGuards(BasicAuthGuard)
 @Controller('api/media')
@@ -28,6 +32,8 @@ export class MediaController {
     private readonly uploadUseCase: UploadMediaUseCase,
     @Inject(MEDIA_TOKENS.GetMediaUseCase)
     private readonly getMediaUseCase: GetMediaUseCase,
+    @Inject(MEDIA_TOKENS.DeleteMediaUseCase)
+    private readonly deleteMediaUseCase: DeleteMediaUseCase,
     private readonly mediaMapper: MediaMapper,
   ) {}
 
@@ -66,6 +72,19 @@ export class MediaController {
       success: true,
       message: '미디어 조회 성공',
       data: response,
+    };
+  }
+
+  @Delete(':mediaId')
+  async deleteMedia(
+    @Param('mediaId') mediaId: string,
+  ): Promise<BaseResponse<null>> {
+    const command = new DeleteMediaCommand(BigInt(mediaId));
+    await this.deleteMediaUseCase.execute(command);
+    return {
+      success: true,
+      message: '미디어 삭제 성공',
+      data: null,
     };
   }
 }
