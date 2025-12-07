@@ -19,6 +19,7 @@ import { RedisModule } from './adapter/out/cache/redis.module';
 import { RedisTokenVersionQueryAdapter } from './adapter/out/cache/redis-token-version.query.adapter';
 import { MediaRepositoryAdapter } from './adapter/out/persistence/media/media.repository.adapter';
 import { MediaQueryAdapter } from './adapter/out/persistence/media/media.query.adapter';
+import { BatchDeleteMediaService } from './application/use-cases/batch-delete-media.service';
 
 @Module({
   imports: [RedisModule],
@@ -37,6 +38,7 @@ import { MediaQueryAdapter } from './adapter/out/persistence/media/media.query.a
     { provide: MEDIA_TOKENS.UploadMediaUseCase, useClass: UploadMediaService },
     { provide: MEDIA_TOKENS.GetMediaUseCase, useClass: GetMediaService },
     { provide: MEDIA_TOKENS.DeleteMediaUseCase, useClass: DeleteMediaService },
+    { provide: MEDIA_TOKENS.BatchDeleteMediaUseCase, useClass: BatchDeleteMediaService},
 
     // Query 바인딩 (읽기)
     {

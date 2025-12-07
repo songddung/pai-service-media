@@ -3,6 +3,7 @@ export const MEDIA_TOKENS = {
   UploadMediaUseCase: Symbol('UploadMediaUseCase'),
   GetMediaUseCase: Symbol('GetMediaUseCase'),
   DeleteMediaUseCase: Symbol('DeleteMediaUseCase'),
+  BatchDeleteMediaUseCase: Symbol('BatchDeleteMediaUseCase'),
 
   // Repository (Output Ports - Write)
   mediaRepositoryPort: Symbol('mediaRepositoryPort'),

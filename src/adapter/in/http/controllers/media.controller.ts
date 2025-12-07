@@ -1,4 +1,5 @@
 import {
+  Body,
   Controller,
   Delete,
   Get,
@@ -23,6 +24,8 @@ import type {
 import { MediaMapper } from 'src/application/port/in/mapper/media.mapper';
 import { BasicAuthGuard } from '../auth/guards/auth.guard';
 import { DeleteMediaCommand } from 'src/application/command/delete-media.command';
+import { BatchDeleteMediaRequestDto } from '../dto/batch-delete.request.dto';
+import type { BatchDeleteMediaUseCase } from 'src/application/port/in/batch-delete-media.use-case';
 
 @UseGuards(BasicAuthGuard)
 @Controller('api/media')
@@ -30,10 +33,16 @@ export class MediaController {
   constructor(
     @Inject(MEDIA_TOKENS.UploadMediaUseCase)
     private readonly uploadUseCase: UploadMediaUseCase,
+    
     @Inject(MEDIA_TOKENS.GetMediaUseCase)
     private readonly getMediaUseCase: GetMediaUseCase,
+    
     @Inject(MEDIA_TOKENS.DeleteMediaUseCase)
     private readonly deleteMediaUseCase: DeleteMediaUseCase,
+
+    @Inject(MEDIA_TOKENS.BatchDeleteMediaUseCase)
+    private readonly batchDeleteMediaUseCase: BatchDeleteMediaUseCase,
+
     private readonly mediaMapper: MediaMapper,
   ) {}
 
@@ -75,6 +84,19 @@ export class MediaController {
     };
   }
 
+    @Delete('batch')
+  async batchDeleteMedia(
+    @Body() dto: BatchDeleteMediaRequestDto,
+  ): Promise<BaseResponse<null>> {
+    const command = this.mediaMapper.toBatchDeleteMediaCommand(dto);
+    await this.batchDeleteMediaUseCase.execute(command);
+    return {
+      success: true,
+      message: '미디어 삭제 배치 작업 성공',
+      data: null,
+    }
+  }
+
   @Delete(':mediaId')
   async deleteMedia(
     @Param('mediaId') mediaId: string,
@@ -87,4 +109,7 @@ export class MediaController {
       data: null,
     };
   }
+
+
+
 }

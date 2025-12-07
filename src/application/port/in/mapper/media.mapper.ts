@@ -7,6 +7,8 @@ import { UploadMediaCommand } from 'src/application/command/upload-media.command
 import { GetMediaCommand } from 'src/application/command/get-media.command';
 import { GetMediaResult } from 'src/application/port/in/result/get-media.result';
 import { UploadMediaResult } from 'src/application/port/in/result/upload-media.result';
+import { BatchDeleteMediaCommand } from 'src/application/command/batch-delete-media.command';
+import { BatchDeleteMediaRequestDto } from 'src/adapter/in/http/dto/batch-delete.request.dto';
 
 @Injectable()
 export class MediaMapper {
@@ -41,5 +43,9 @@ export class MediaMapper {
       s3Key: media.s3Key,
       createdAt: media.createdAt,
     }));
+  }
+
+  toBatchDeleteMediaCommand(dto: BatchDeleteMediaRequestDto): BatchDeleteMediaCommand {
+    return new BatchDeleteMediaCommand(dto.mediaIds.map(mediaId=>BigInt(mediaId)));
   }
 }

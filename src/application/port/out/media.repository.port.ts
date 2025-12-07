@@ -7,4 +7,5 @@ import { Media } from 'src/domain/model/entity/media.entity';
 export interface MediaRepositoryPort {
   save(media: Media): Promise<Media>;
   delete(mediaId: number): Promise<void>;
+  deleteMany(mediaId:number[]): Promise<void>;
 }

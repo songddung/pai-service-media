@@ -25,4 +25,18 @@ export class MediaRepositoryAdapter implements MediaRepositoryPort {
       where: { media_id: BigInt(mediaId) },
     });
   }
+
+  async deleteMany(mediaIds: number[]): Promise<void> {
+    if(!mediaIds || mediaIds.length == 0) {
+      throw new Error('Media IDs are required for batch delete');
+    }
+
+    await this.prisma.media.deleteMany({
+      where: {
+        media_id: {
+          in: mediaIds.map(id=>BigInt(id))
+        }
+      },
+    });
+  }
 }
