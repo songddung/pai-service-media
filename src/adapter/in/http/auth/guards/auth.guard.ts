@@ -37,7 +37,7 @@ export class AuthGuard implements CanActivate {
     const req = context.switchToHttp().getRequest<Request>();
 
     // 1) Bearer 토큰 추출
-    const authHeader = req.headers['authorization'] as string | undefined;
+    const authHeader = req.headers['authorization'];
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
       throw new UnauthorizedException('UNAUTHORIZED: Bearer token required');
     }
@@ -57,8 +57,10 @@ export class AuthGuard implements CanActivate {
     const profileType = claims.profileType;
     const deviceId = claims.deviceId;
 
-    if (!userId) throw new UnauthorizedException('UNAUTHORIZED: sub(userId) missing');
-    if (!profileId) throw new BadRequestException('VALIDATION_ERROR: profileId missing');
+    if (!userId)
+      throw new UnauthorizedException('UNAUTHORIZED: sub(userId) missing');
+    if (!profileId)
+      throw new BadRequestException('VALIDATION_ERROR: profileId missing');
     if (profileType !== 'parent' && profileType !== 'child') {
       throw new ForbiddenException('FORBIDDEN: invalid profile type');
     }
@@ -66,9 +68,14 @@ export class AuthGuard implements CanActivate {
     // 4) Token Version 검증 (무효화된 토큰 차단)
     const tokenVersion = claims.tokenVersion;
     if (tokenVersion !== undefined) {
-      const currentVersion = await this.tokenVersionQuery.getVersion(Number(userId), String(deviceId));
+      const currentVersion = await this.tokenVersionQuery.getVersion(
+        Number(userId),
+        String(deviceId),
+      );
       if (tokenVersion !== currentVersion) {
-        throw new UnauthorizedException('UNAUTHORIZED: token has been revoked (version mismatch)');
+        throw new UnauthorizedException(
+          'UNAUTHORIZED: token has been revoked (version mismatch)',
+        );
       }
     }
 
@@ -123,7 +130,7 @@ export class BasicAuthGuard implements CanActivate {
     const req = context.switchToHttp().getRequest<Request>();
 
     // 1) Bearer 토큰 추출
-    const authHeader = req.headers['authorization'] as string | undefined;
+    const authHeader = req.headers['authorization'];
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
       throw new UnauthorizedException('UNAUTHORIZED: Bearer token required');
     }
@@ -147,9 +154,14 @@ export class BasicAuthGuard implements CanActivate {
     // 4) Token Version 검증 (무효화된 토큰 차단)
     const tokenVersion = claims.tokenVersion;
     if (tokenVersion !== undefined) {
-      const currentVersion = await this.tokenVersionQuery.getVersion(Number(userId), String(deviceId));
+      const currentVersion = await this.tokenVersionQuery.getVersion(
+        Number(userId),
+        String(deviceId),
+      );
       if (tokenVersion !== currentVersion) {
-        throw new UnauthorizedException('UNAUTHORIZED: token has been revoked (version mismatch)');
+        throw new UnauthorizedException(
+          'UNAUTHORIZED: token has been revoked (version mismatch)',
+        );
       }
     }
 
