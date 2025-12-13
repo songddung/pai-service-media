@@ -8,5 +8,5 @@ export interface TokenVersionQueryPort {
    * @param userId 사용자 ID
    * @returns 현재 version 번호 (없으면 0)
    */
-  getVersion(userId: number): Promise<number>;
+  getVersion(userId: number, deviceId: string): Promise<number>;
 }
