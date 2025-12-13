@@ -1,6 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { S3Client, PutObjectCommand, DeleteObjectCommand } from '@aws-sdk/client-s3';
+import {
+  S3Client,
+  PutObjectCommand,
+  DeleteObjectCommand,
+} from '@aws-sdk/client-s3';
 import { S3ServicePort } from 'src/application/port/out/s3-service.port';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -15,7 +19,9 @@ export class S3Service implements S3ServicePort {
       region: this.configService.get<string>('AWS_REGION') || 'ap-northeast-2',
       credentials: {
         accessKeyId: this.configService.get<string>('AWS_ACCESS_KEY_ID')!,
-        secretAccessKey: this.configService.get<string>('AWS_SECRET_ACCESS_KEY')!,
+        secretAccessKey: this.configService.get<string>(
+          'AWS_SECRET_ACCESS_KEY',
+        )!,
       },
     });
 
@@ -23,7 +29,9 @@ export class S3Service implements S3ServicePort {
     this.cdnDomain = this.configService.get<string>('S3_CDN_BASE_URL') || '';
   }
 
-  async upload(file: Express.Multer.File): Promise<{ s3Key: string; cdnUrl: string }> {
+  async upload(
+    file: Express.Multer.File,
+  ): Promise<{ s3Key: string; cdnUrl: string }> {
     // 고유한 파일명 생성 (UUID + 원본 확장자)
     const fileExtension = file.originalname.split('.').pop();
     const s3Key = `media/${uuidv4()}.${fileExtension}`;

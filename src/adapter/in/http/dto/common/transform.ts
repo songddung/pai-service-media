@@ -2,7 +2,7 @@ import { Transform } from 'class-transformer';
 
 // 문자열이면 trim, 공백만 있으면 undefined로
 export const TrimToUndefined = () =>
-  Transform(({ value }) => {
+  Transform(({ value }: { value: unknown }) => {
     if (typeof value !== 'string') return value;
     const t = value.trim();
     return t === '' ? undefined : t;

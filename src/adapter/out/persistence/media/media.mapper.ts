@@ -29,7 +29,13 @@ export class MediaMapper {
    * Domain Entity → Prisma Data
    * 도메인 엔티티를 Prisma의 create/update용 데이터로 변환
    */
-  static toPersistence(media: Media): any {
+  static toPersistence(media: Media): {
+    file_name: string;
+    mime_type: string;
+    file_size: bigint;
+    s3_key: string;
+    cdn_url: string;
+  } {
     return {
       file_name: media.getFileName(),
       mime_type: media.getMimeType(),

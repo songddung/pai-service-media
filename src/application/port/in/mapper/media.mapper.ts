@@ -12,9 +12,7 @@ import { BatchDeleteMediaRequestDto } from 'src/adapter/in/http/dto/batch-delete
 
 @Injectable()
 export class MediaMapper {
-  toUploadMediaCommand(
-    file: Express.Multer.File,
-  ): UploadMediaCommand {
+  toUploadMediaCommand(file: Express.Multer.File): UploadMediaCommand {
     return new UploadMediaCommand(file);
   }
 
@@ -45,7 +43,11 @@ export class MediaMapper {
     }));
   }
 
-  toBatchDeleteMediaCommand(dto: BatchDeleteMediaRequestDto): BatchDeleteMediaCommand {
-    return new BatchDeleteMediaCommand(dto.mediaIds.map(mediaId=>BigInt(mediaId)));
+  toBatchDeleteMediaCommand(
+    dto: BatchDeleteMediaRequestDto,
+  ): BatchDeleteMediaCommand {
+    return new BatchDeleteMediaCommand(
+      dto.mediaIds.map((mediaId) => BigInt(mediaId)),
+    );
   }
 }
