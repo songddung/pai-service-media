@@ -1,10 +1,7 @@
 import { Controller, Get, Inject, Query } from '@nestjs/common';
 import { MEDIA_TOKENS } from 'src/media.token';
 import type { GetMediaUseCase } from 'src/application/port/in/get-media.use-case';
-import type {
-  BaseResponse,
-  GetMediaResponseData,
-} from 'pai-shared-types';
+import type { BaseResponse, GetMediaResponseData } from 'pai-shared-types';
 import { MediaMapper } from 'src/application/port/in/mapper/media.mapper';
 
 /**

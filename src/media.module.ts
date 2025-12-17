@@ -38,7 +38,10 @@ import { BatchDeleteMediaService } from './application/use-cases/batch-delete-me
     { provide: MEDIA_TOKENS.UploadMediaUseCase, useClass: UploadMediaService },
     { provide: MEDIA_TOKENS.GetMediaUseCase, useClass: GetMediaService },
     { provide: MEDIA_TOKENS.DeleteMediaUseCase, useClass: DeleteMediaService },
-    { provide: MEDIA_TOKENS.BatchDeleteMediaUseCase, useClass: BatchDeleteMediaService},
+    {
+      provide: MEDIA_TOKENS.BatchDeleteMediaUseCase,
+      useClass: BatchDeleteMediaService,
+    },
 
     // Query 바인딩 (읽기)
     {

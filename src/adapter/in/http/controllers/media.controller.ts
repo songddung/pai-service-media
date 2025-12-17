@@ -33,10 +33,10 @@ export class MediaController {
   constructor(
     @Inject(MEDIA_TOKENS.UploadMediaUseCase)
     private readonly uploadUseCase: UploadMediaUseCase,
-    
+
     @Inject(MEDIA_TOKENS.GetMediaUseCase)
     private readonly getMediaUseCase: GetMediaUseCase,
-    
+
     @Inject(MEDIA_TOKENS.DeleteMediaUseCase)
     private readonly deleteMediaUseCase: DeleteMediaUseCase,
 
@@ -84,7 +84,7 @@ export class MediaController {
     };
   }
 
-    @Delete('batch')
+  @Delete('batch')
   async batchDeleteMedia(
     @Body() dto: BatchDeleteMediaRequestDto,
   ): Promise<BaseResponse<null>> {
@@ -94,7 +94,7 @@ export class MediaController {
       success: true,
       message: '미디어 삭제 배치 작업 성공',
       data: null,
-    }
+    };
   }
 
   @Delete(':mediaId')
@@ -109,7 +109,4 @@ export class MediaController {
       data: null,
     };
   }
-
-
-
 }

@@ -1,5 +1,3 @@
 export class UploadMediaCommand {
-  constructor(
-    public readonly file: Express.Multer.File,
-  ) {}
+  constructor(public readonly file: Express.Multer.File) {}
 }

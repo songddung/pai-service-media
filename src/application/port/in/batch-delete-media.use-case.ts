@@ -1,5 +1,5 @@
-import { BatchDeleteMediaCommand } from "src/application/command/batch-delete-media.command";
+import { BatchDeleteMediaCommand } from 'src/application/command/batch-delete-media.command';
 
 export interface BatchDeleteMediaUseCase {
-    execute(command: BatchDeleteMediaCommand): Promise<void>;
+  execute(command: BatchDeleteMediaCommand): Promise<void>;
 }
